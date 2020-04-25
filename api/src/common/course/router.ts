@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { Course } from ".";
+import { authorize } from "../authorization";
+
 export const router = Router();
 
 router.get("/", async (req, res) => {
@@ -37,7 +39,7 @@ router.get("/:name", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authorize, async (req, res) => {
     const course = new Course(req.body);
 
     try {
@@ -49,7 +51,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/", async (req, res) => {
+router.put("/", authorize, async (req, res) => {
     const course = new Course(req.body);
 
     try {
@@ -61,7 +63,7 @@ router.put("/", async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", authorize, async (req, res) => {
     if (typeof req.query.id === "string") {
         try {
             const course = await Course.findById(parseInt(req.query.id));

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Category } from ".";
+import { authorize } from "../authorization";
 
 export const router = Router();
 
@@ -18,7 +19,7 @@ router.get("/:name", async (req, res) => {
     res.json(category);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authorize, async (req, res) => {
     const category = new Category(req.body);
 
     try {
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/", async (req, res) => {
+router.put("/", authorize, async (req, res) => {
     const category = new Category(req.body);
 
     try {
@@ -42,7 +43,7 @@ router.put("/", async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", authorize, async (req, res) => {
     if (typeof req.query.id === "string") {
         try {
             const category = await Category.findById(parseInt(req.query.id));
