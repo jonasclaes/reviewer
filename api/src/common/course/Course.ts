@@ -1,12 +1,13 @@
 import { ICourse, ICourseConstructorProperties } from ".";
 import { database } from "../database";
+import { Category } from "../category";
 
 export class Course implements ICourse {
     public id: number | null = null;
     public timestamp: Date | null = null;
     public name: string | null = null;
     public description: string | null = null;
-    public category: number | null = null;
+    public category: number | string | null = null;
     public videoUrl: string | null = null;
 
     constructor(props?: ICourseConstructorProperties) {
@@ -117,6 +118,27 @@ export class Course implements ICourse {
                     err ? reject(err) : resolve();
                 });
             });
+        }
+    }
+
+    public async delete(): Promise<void> {
+        if (this.id != null) {
+            return new Promise((resolve, reject) => {
+                database.getConnection().query("DELETE FROM `courses` WHERE `courses`.`id` = ?", [this.id], (err, results, fields) => {
+                    err ? reject(err) : resolve();
+                });
+            });
+        }
+    }
+
+    public async populate(): Promise<void> {
+        if (this.category) {
+            try {
+                const category = typeof this.category == "number" ? await Category.findById(this.category) : await Category.findById(parseInt(this.category));
+                this.category = category.name;
+            } catch (err) {
+                throw err;
+            }
         }
     }
 }

@@ -3,6 +3,6 @@ export interface ICourseConstructorProperties {
     timestamp?: Date | null;
     name?: string | null;
     description?: string | null;
-    category?: number | null;
+    category?: number | string | null;
     videoUrl?: string | null;
 }

@@ -3,7 +3,9 @@ export interface ICourse {
     timestamp: Date | null;
     name: string | null;
     description: string | null;
-    category: number | null;
+    category: number | string | null;
     videoUrl: string | null;
     save(): Promise<void>;
+    delete(): Promise<void>;
+    populate(): Promise<void>;
 }

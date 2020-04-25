@@ -101,4 +101,14 @@ export class Category implements ICategory {
             });
         }
     }
+
+    public async delete(): Promise<void> {
+        if (this.id != null) {
+            return new Promise((resolve, reject) => {
+                database.getConnection().query("DELETE FROM `categories` WHERE `categories`.`id` = ?", [this.id], (err, results, fields) => {
+                    err ? reject(err) : resolve();
+                });
+            });
+        }
+    }
 }

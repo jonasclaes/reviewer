@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
         await category.save();
         res.status(200).send("OK");
     } catch (err) {
+        console.error(err);
         res.status(500).send("Internal server error.");
     }
 });
@@ -36,6 +37,24 @@ router.put("/", async (req, res) => {
         await category.save();
         res.status(200).send("OK");
     } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal server error.");
+    }
+});
+
+router.delete("/", async (req, res) => {
+    if (typeof req.query.id === "string") {
+        try {
+            const category = await Category.findById(parseInt(req.query.id));
+
+            await category.delete();
+
+            res.status(200).send("OK");
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal server error.");
+        }
+    } else {
         res.status(500).send("Internal server error.");
     }
 });
