@@ -7,14 +7,10 @@ export const router = Router();
 router.get("/", async (req, res) => {
     const limit = <string> req.query.limit;
     const offset = <string> req.query.offset;
+    const search = <string> req.query.search;
 
     try {
-        let courses: Course[];
-        if (req.query.search.toString() !== "") {
-            courses = await Course.findAllLike(parseInt(limit || "100"), parseInt(offset || "0"), req.query.search.toString());
-        } else {
-            courses = await Course.findAll(parseInt(limit || "100"), parseInt(offset || "0"));
-        }
+        const courses = await Course.findAll(parseInt(limit || "100"), parseInt(offset || "0"), search || "");
 
         if (req.query.populate === "true") {
             await Promise.all(courses.map(async element => {
