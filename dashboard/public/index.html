@@ -51,9 +51,9 @@
                     <div class="col-12" style="margin-bottom: 20px;">
                         <form>
                             <div class="input-group">
-                                <input class="form-control" type="text" name="search" placeholder="Not implemented yet!" disabled>
+                                <input class="form-control" type="text" name="search" id="searchText">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button" disabled>Search</button>
+                                    <button class="btn btn-primary" type="button" id="searchBtn">Search</button>
                                 </div>
                             </div>
                         </form>
@@ -101,11 +101,17 @@
         }
 
         const loadCourses = async () => {
+            // Clear the results;
+            $("#courses").html("");
+
             // Setup endpoint URL;
             const fetchUrl = new URL(courseEndpoint);
 
             // Populate the request with names of categories;
             fetchUrl.searchParams.set("populate", "true");
+
+            // Search for specific names;
+            fetchUrl.searchParams.set("search", $("#searchText").val());
 
             // Do the actual request;
             const fetchResult = await fetch(fetchUrl)
@@ -139,6 +145,20 @@
 
         loadCategories();
         loadCourses();
+
+        let keyUpTimer = null;
+
+        $("#searchText").on("keyup", (event) => {
+            clearTimeout(keyUpTimer);
+            keyUpTimer = setTimeout(() => {
+                loadCourses();
+            }, 250);
+        });
+
+        $("#searchBtn").on("click", (event) => {
+            event.preventDefault();
+            loadCourses();
+        });
     </script>
 </body>
 
