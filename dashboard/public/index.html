@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ReViewer by Jonas Claes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">ReViewer</a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-3" style="margin-bottom: 20px;">
+                <form>
+                    <fieldset>
+                        <legend>Courses</legend>
+                        <div id="categories"></div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-sm-12 col-md-9" style="margin-bottom: 20px;">
+                <div class="row">
+                    <div class="col-12" style="margin-bottom: 20px;">
+                        <form>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="search" placeholder="Not implemented yet!" disabled>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" disabled>Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <div class="row" id="courses"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const apiEndpoint = "https://api.reviewer.jonasclaes.be/api";
+        const categoryEndpoint = apiEndpoint + "/category";
+        const courseEndpoint = apiEndpoint + "/course";
+
+        const loadCategories = async () => {
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category load request successfull");
+                
+                // Get JSON from request;
+                const fetchJSON = await fetchResult.json();
+
+                fetchJSON.forEach(category => {
+                    const html = `<div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input" type="checkbox" id="formCheck-${category.id}" checked="">
+                                    <label class="custom-control-label" for="formCheck-${category.id}">${category.name}</label>
+                                </div>`;
+
+                    $("#categories").append(html);
+                });
+            } else {
+                console.log("Category load request failed");
+                return;
+            }
+        }
+
+        const loadCourses = async () => {
+            // Setup endpoint URL;
+            const fetchUrl = new URL(courseEndpoint);
+
+            // Populate the request with names of categories;
+            fetchUrl.searchParams.set("populate", "true");
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Course load request successfull");
+                
+                // Get JSON from request;
+                const fetchJSON = await fetchResult.json();
+
+                fetchJSON.forEach(course => {
+                    const html = `<div class="col-sm-6" style="margin-bottom: 20px;">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">${course.name}</h4>
+                                            <h6 class="text-muted card-subtitle mb-2">${course.category}/${new Date(course.timestamp).toLocaleString()}</h6>
+                                            <p class="card-text">${course.description}</p>
+                                            <a class="card-link" href="${course.videoUrl}">Bekijk</a>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                    $("#courses").append(html);
+                });
+            } else {
+                console.log("Course load request failed");
+                return;
+            }
+        }
+
+        loadCategories();
+        loadCourses();
+    </script>
+</body>
+
+</html>
