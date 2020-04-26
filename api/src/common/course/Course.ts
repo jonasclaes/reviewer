@@ -79,6 +79,22 @@ export class Course implements ICourse {
         });
     }
 
+    public static async findAllLike(limit: number, offset: number, name: string): Promise<Course[]> {
+        return new Promise((resolve, reject) => {
+            database.getConnection().query("SELECT * FROM `courses` WHERE name LIKE %?% LIMIT ? OFFSET ?", [name, limit, offset], (err, results: ICourse[], fields) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    const returnArray: Course[] = [];
+                    results.forEach(element => {
+                        returnArray.push(new Course(element));
+                    });
+                    resolve(returnArray);
+                }
+            });
+        });
+    }
+
     public static async findById(id: number): Promise<Course> {
         return new Promise((resolve, reject) => {
             database.getConnection().query("SELECT * FROM `courses` WHERE id = ?", [id], (err, results: ICourse[], fields) => {

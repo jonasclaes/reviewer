@@ -9,7 +9,13 @@ router.get("/", async (req, res) => {
     const offset = <string> req.query.offset;
 
     try {
-        const courses = await Course.findAll(parseInt(limit || "100"), parseInt(offset || "0"));
+        let courses: Course[];
+        if (req.query.search) {
+            courses = await Course.findAllLike(parseInt(limit || "100"), parseInt(offset || "0"), req.query.search.toString());
+        } else {
+            courses = await Course.findAll(parseInt(limit || "100"), parseInt(offset || "0"));
+        }
+        
 
         if (req.query.populate === "true") {
             await Promise.all(courses.map(async element => {
