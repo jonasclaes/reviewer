@@ -114,7 +114,7 @@ export class Course implements ICourse {
         } else {
             // Update;
             return new Promise((resolve, reject) => {
-                database.getConnection().query("UPDATE `courses` SET `timestamp` = ?, SET `name` = ?, SET `description` = ?, SET `category` = ?, SET `videoUrl` = ? WHERE `courses`.`id` = ?", [this.timestamp, this.name, this.description, this.category, this.videoUrl, this.id], (err, results, fields) => {
+                database.getConnection().query("UPDATE `courses` SET `timestamp` = ?, `name` = ?, `description` = ?, `category` = ?, `videoUrl` = ? WHERE `courses`.`id` = ?", [this.timestamp, this.name, this.description, this.category, this.videoUrl, this.id], (err, results, fields) => {
                     err ? reject(err) : resolve();
                 });
             });
