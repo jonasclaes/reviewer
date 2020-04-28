@@ -65,7 +65,7 @@ export class Course implements ICourse {
 
     public static async findAll(limit: number, offset: number, name: string): Promise<Course[]> {
         return new Promise((resolve, reject) => {
-            database.getConnection().query("SELECT * FROM `courses` WHERE `name` LIKE ? LIMIT ? OFFSET ? ORDER BY timestamp DESC", ["%" + name + "%", limit, offset], (err, results: ICourse[], fields) => {
+            database.getConnection().query("SELECT * FROM `courses` WHERE `name` LIKE ? ORDER BY timestamp DESC LIMIT ? OFFSET ?", ["%" + name + "%", limit, offset], (err, results: ICourse[], fields) => {
                 if (err) {
                     reject(err);
                 } else {
