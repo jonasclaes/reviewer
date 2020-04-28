@@ -46,7 +46,7 @@ export class Category implements ICategory {
 
     public static findAll(limit: number, offset: number): Promise<Category[]> {
         return new Promise((resolve, reject) => {
-            database.getConnection().query("SELECT * FROM `categories` LIMIT ? OFFSET ?", [limit, offset], (err, results: ICategory[], fields) => {
+            database.getConnection().query("SELECT * FROM `categories` LIMIT ? OFFSET ? ORDER BY timestamp DESC", [limit, offset], (err, results: ICategory[], fields) => {
                 if (err) {
                     reject(err);
                 } else {
