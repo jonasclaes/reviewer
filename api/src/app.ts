@@ -14,6 +14,7 @@ dotenv.config();
 import { database } from "./common/database";
 import { router as categoryRouter, Category } from "./common/category";
 import { router as courseRouter, Course } from "./common/course";
+import { router as userRouter, User } from "./common/user";
 
 // Setup Express;
 const app = express();
@@ -36,6 +37,7 @@ app.use(morgan(process.env.LOG_MODE || "dev"));
 // Setup routes;
 app.use("/api/category", categoryRouter);
 app.use("/api/course", courseRouter);
+app.use("/api/user", userRouter);
 
 const startServer = async () => {
     try {
@@ -69,6 +71,24 @@ const startServer = async () => {
                         console.log(`Courses table doesnt exist. Creating now...`);
                         await Course.createTable();
                         console.log(`Courses table created.`);
+                        resolve();
+                    } else {
+                        resolve();
+                    }
+                }
+            });
+        });
+
+        // Check if users table exists;
+        await new Promise(async (resolve, reject) => {
+            database.getConnection().query("SHOW TABLES LIKE ?", ["users"], async (err, results, fields) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (results.length < 1) {
+                        console.log(`Users table doesnt exist. Creating now...`);
+                        await User.createTable();
+                        console.log(`Users table created.`);
                         resolve();
                     } else {
                         resolve();
