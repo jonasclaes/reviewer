@@ -20,7 +20,7 @@
             </div>
         </div>
     </nav>
-    <div class="container" style="margin-top: 30px;">
+    <div class="container" style="margin-top: 30px;margin-bottom: 30px;">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-8 col-md-6">
                 <div class="card">
@@ -28,10 +28,14 @@
                         <h5 class="mb-0">Register</h5>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-danger" role="alert"><span><strong>Alert</strong> text.</span></div>
                         <form>
+                            <div class="form-group"><label for="firstName">First name:</label><input class="form-control" type="text" name="firstName" placeholder="John"><small class="form-text text-muted">Please enter your first name here.</small></div>
+                            <div class="form-group"><label for="lastName">Last name:</label><input class="form-control" type="text" name="lastName" placeholder="Doe"><small class="form-text text-muted">Please enter your last name here.</small></div>
                             <div class="form-group"><label for="username">Username:</label><input class="form-control" type="text" name="username" placeholder="john.doe"><small class="form-text text-muted">Please enter your username here.</small></div>
                             <div class="form-group"><label for="email">Email:</label><input class="form-control" type="text" name="email" placeholder="john.doe@example.org"><small class="form-text text-muted">Please enter your email here.</small></div>
                             <div class="form-group"><label for="password">Password:</label><input class="form-control" type="password" name="password"><small class="form-text text-muted">Please enter your password here.</small></div>
+                            <div class="form-group"><label for="passwordVerification">Password verification:</label><input class="form-control" type="password" name="passwordVerification"><small class="form-text text-muted">Please enter your password here again.</small></div>
                         </form><button class="btn btn-primary btn-block" type="button">Register</button><small>Already have an account? Login&nbsp;<a href="login">here</a>!</small></div>
                 </div>
             </div>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Reviewer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+</head>
+
+<body style="min-height: 100vh;">
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">ReViewer</a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/">Dashboard</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 30px;margin-bottom: 30px;">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-8 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Register</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger" role="alert" id="alertBox" style="display: none;"></div>
+                        <form>
+                            <div class="form-group">
+                                <label for="firstName">First name:</label>
+                                <input class="form-control" type="text" name="firstName" placeholder="John">
+                                <small class="form-text text-muted">Please enter your first name here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last name:</label>
+                                <input class="form-control" type="text" name="lastName" placeholder="Doe">
+                                <small class="form-text text-muted">Please enter your last name here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input class="form-control" type="text" name="username" placeholder="john.doe">
+                                <small class="form-text text-muted">Please enter your username here. Your username has to be at least 10 characters long.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input class="form-control" type="email" name="email" placeholder="john.doe@example.org">
+                                <small class="form-text text-muted">Please enter your email here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input class="form-control" type="password" name="password">
+                                <small class="form-text text-muted">Please enter your password here. Your password has to be at least 8 characters long.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordVerification">Password verification:</label>
+                                <input class="form-control" type="password" name="passwordVerification">
+                                <small class="form-text text-muted">Please enter your password here again.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-primary btn-block" type="button" id="registerBtn">Register</button>
+                        <small>Already have an account? Login&nbsp;<a href="login">here</a>!</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const validateFirstName = event => {
+            event ? event.preventDefault() : null;
+
+            const chars = $("input[name=firstName]").val().length;
+
+            if (chars <= 1) {
+                $("input[name=firstName]").addClass("is-invalid");
+                $("input[name=firstName]").removeClass("is-valid");
+            } else {
+                $("input[name=firstName]").addClass("is-valid");
+                $("input[name=firstName]").removeClass("is-invalid")
+            }
+        }
+
+        const validateLastName = event => {
+            event ? event.preventDefault() : null;
+
+            const chars = $("input[name=lastName]").val().length;
+
+            if (chars <= 1) {
+                $("input[name=lastName]").addClass("is-invalid");
+                $("input[name=lastName]").removeClass("is-valid");
+            } else {
+                $("input[name=lastName]").addClass("is-valid");
+                $("input[name=lastName]").removeClass("is-invalid")
+            }
+        }
+
+        const validateUsername = event => {
+            event ? event.preventDefault() : null;
+
+            const chars = $("input[name=username]").val().length;
+
+            if (chars < 10) {
+                $("input[name=username]").addClass("is-invalid");
+                $("input[name=username]").removeClass("is-valid");
+            } else {
+                $("input[name=username]").addClass("is-valid");
+                $("input[name=username]").removeClass("is-invalid")
+            }
+        }
+
+        const validateEmail = event => {
+            event ? event.preventDefault() : null;
+
+            const chars = $("input[name=email]").val().length;
+
+            if (chars <= 5) {
+                $("input[name=email]").addClass("is-invalid");
+                $("input[name=email]").removeClass("is-valid");
+            } else {
+                $("input[name=email]").addClass("is-valid");
+                $("input[name=email]").removeClass("is-invalid")
+            }
+        }
+
+        const validatePassword = event => {
+            event ? event.preventDefault() : null;
+
+            const password = $("input[name=password]").val();
+            const chars = password.length;
+            const passwordVerification = $("input[name=passwordVerification]").val();
+
+            if (chars < 8) {
+                $("input[name=password]").addClass("is-invalid");
+                $("input[name=password]").removeClass("is-valid");
+            } else {
+                $("input[name=password]").addClass("is-valid");
+                $("input[name=password]").removeClass("is-invalid")
+            }
+
+            if (chars < 8 || password !== passwordVerification) {
+                $("input[name=passwordVerification]").addClass("is-invalid");
+                $("input[name=passwordVerification]").removeClass("is-valid");
+            } else {
+                $("input[name=passwordVerification]").addClass("is-valid");
+                $("input[name=passwordVerification]").removeClass("is-invalid");
+            }
+        }
+
+        const doRegister = async event => {
+            event ? event.preventDefault() : null;
+
+            validateFirstName();
+            validateLastName();
+            validateUsername();
+            validateEmail();
+            validatePassword();
+
+            if ($("input").hasClass("is-invalid")) {
+                return;
+            }
+
+            try {
+                const res = await fetch("/register", {
+                    method: "POST",
+                    redirect: "follow",
+                    body: JSON.stringify({
+                        firstName: $("input[name=firstName]").val(),
+                        lastName: $("input[name=lastName]").val(),
+                        username: $("input[name=username]").val(),
+                        email: $("input[name=email]").val(),
+                        password: $("input[name=password]").val()
+                    }),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const text = await res.text();
+
+                console.log(text);
+
+                if (res.status === 400) {
+                    const array = JSON.parse(text);
+                    let errText = "";
+
+                    array.forEach(element => {
+                        errText += "<span>" + element + "</span><br>"
+                    });
+
+                    $("#alertBox").show();
+                    $("#alertBox").html(errText);
+                }
+
+                if (res.redirected) {
+                    window.location.href = res.url;
+                }
+            
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        $("#registerBtn").on("click", doRegister);
+
+        $(document).on("keyup", event => {
+            event.preventDefault();
+
+            if (event.keyCode == 13) {
+                doRegister();
+            }
+        });
+
+        $("input[name=firstName]").on("keyup", validateFirstName);
+        $("input[name=firstName]").on("focus", validateFirstName);
+
+        $("input[name=lastName]").on("keyup", validateLastName);
+        $("input[name=lastName]").on("focus", validateLastName);
+
+        $("input[name=username]").on("keyup", validateUsername);
+        $("input[name=username]").on("focus", validateUsername);
+
+        $("input[name=email]").on("keyup", validateEmail);
+        $("input[name=email]").on("focus", validateEmail);
+
+        $("input[name=password], input[name=passwordVerification]").on("keyup", validatePassword);
+        $("input[name=password], input[name=passwordVerification]").on("focus", validatePassword);
+    </script>
+</body>
+
+</html>
