@@ -1,0 +1,56 @@
+version: "3"
+services:
+    database:
+        image: mysql:5.6
+        restart: always
+        environment:
+            - MYSQL_DATABASE=reviewer
+            - MYSQL_ROOT_PASSWORD=CHANGE_THIS_PASSWORD
+        networks:
+            - internal
+        volumes:
+            - database_volume:/var/lib/mysql
+
+    api:
+        build: ./api
+        restart: always
+        environment:
+            - MYSQL_HOST=database
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=CHANGE_THIS_PASSWORD_TO_MYSQL_PASSWORD
+            - MYSQL_DATABASE=reviewer
+            - API_PASSWORD=CHANGE_THIS_PASSWORD
+            # - PROXY_ADDR=ADDRS # Set your proxies here for correct IP resolution.
+        networks:
+            - internal
+            - web
+        depends_on:
+            - database
+
+    website:
+        build: ./website
+        restart: always
+        networks:
+            - web
+
+    dashboard:
+        build: ./dashboard
+        restart: always
+        environment:
+            - MYSQL_HOST=database
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=CHANGE_THIS_PASSWORD_TO_MYSQL_PASSWORD
+            - MYSQL_DATABASE=reviewer
+            # - PROXY_ADDR=ADDRS # Set your proxies here for correct IP resolution.
+        networks:
+            - internal
+            - web
+
+networks:
+    internal:
+        external: false
+    web:
+        external: true
+
+volumes:
+    database_volume:
