@@ -38,6 +38,17 @@
             </div>
         </div>
         <div class="row">
+            <div class="col">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/">
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12 col-md-3" style="margin-bottom: 20px;">
                 <form>
                     <fieldset>
@@ -130,7 +141,7 @@
                                             <h4 class="card-title">${course.name}</h4>
                                             <h6 class="text-muted card-subtitle mb-2">${course.category}/${new Date(course.timestamp).toLocaleString()}</h6>
                                             <p class="card-text">${course.description}</p>
-                                            <a class="card-link" href="${course.videoUrl}">Bekijk</a>
+                                            <button class="btn btn-primary btn-block" type="button" onclick="goToCourse('${course.name.toString()}')">View</button>
                                         </div>
                                     </div>
                                 </div>`;
@@ -145,6 +156,10 @@
 
         loadCategories();
         loadCourses();
+
+        const goToCourse = (name) => {
+            window.location.href = `/course?name=${name}`;
+        }
 
         let keyUpTimer = null;
 

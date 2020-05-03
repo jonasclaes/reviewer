@@ -54,6 +54,10 @@ app.get("/", authorizeSession, (req, res) => {
     res.render("pages/index");
 });
 
+app.get("/course", authorizeSession, (req, res) => {
+    res.render("pages/course");
+});
+
 app.get("/login", (req, res) => {
     res.render("pages/login");
 });
@@ -65,7 +69,7 @@ app.post("/login", async (req, res) => {
     if (username && password) {
         const user = await User.findByUsernameOrEmail(username);
 
-        if (user.username && user.password && user.checkPassword(password)) {
+        if (user.username && user.password && await user.checkPassword(password)) {
             req.session!.loggedIn = true;
             req.session!.username = user.username;
             res.redirect("/");
@@ -113,8 +117,8 @@ app.post("/register", async (req, res) => {
 app.get("/logout", (req, res) => {
     req.session!.loggedIn = false;
     req.session!.username = null;
-    req.session!.destroy((err) => {
-        console.error(err);
+    req.session!.destroy(err => {
+        err ? console.error(err) : null;
         res.redirect("/login");
     });
 });
