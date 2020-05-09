@@ -1,6 +1,6 @@
 import http from "http";
 import dotenv from "dotenv";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import session from "express-session";
@@ -56,6 +56,32 @@ app.get("/", authorizeSession, (req, res) => {
 
 app.get("/course", authorizeSession, (req, res) => {
     res.render("pages/course");
+});
+
+const checkAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findByUsername(req.session!.username);
+
+    if (user.role == "Admin") {
+        next();
+    } else {
+        res.redirect("/");
+    }
+}
+
+app.get("/admin/api-password", authorizeSession, checkAdmin, (req, res) => {
+    res.send(process.env.API_PASSWORD);
+});
+
+app.get("/admin", authorizeSession, checkAdmin, (req, res) => {
+    res.redirect("/admin/category");
+});
+
+app.get("/admin/category", authorizeSession, checkAdmin, (req, res) => {
+    res.render("pages/admin-category");
+});
+
+app.get("/admin/course", authorizeSession, checkAdmin, (req, res) => {
+    res.render("pages/admin-course");
 });
 
 app.get("/login", (req, res) => {

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ReViewer by Jonas Claes | ADMIN</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                ReViewer <strong>ADMIN</strong>
+            </a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/admin/category">Category</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="/admin/course">Course</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/logout">Logout</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col">
+                <h1>Category</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Insert</h4>
+                        <form id="formInsert">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input class="form-control" type="text" placeholder="Programming" name="name">
+                                <small class="form-text text-muted">Fill out the category name here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-primary btn-block" type="button" id="btnInsert">Insert</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Update</h4>
+                        <form id="formUpdate">
+                            <div class="form-group">
+                                <label for="id">ID:</label>
+                                <input class="form-control" type="number" name="id" placeholder="0">
+                                <small class="form-text text-muted">Fill out the category id here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input class="form-control" type="text" placeholder="Programming" name="name">
+                                <small class="form-text text-muted">Fill out the category name here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-secondary btn-block" type="button" id="btnUpdate">Update</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Delete</h4>
+                        <form id="formDelete">
+                            <div class="form-group">
+                                <label for="id">ID:</label>
+                                <input class="form-control" type="number" name="id" placeholder="0">
+                                <small class="form-text text-muted">Fill out the category id here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-danger btn-block" type="button" id="btnDelete">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="margin-bottom: 20px;">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const apiEndpoint = "https://api.reviewer.jonasclaes.be/api";
+        const categoryEndpoint = apiEndpoint + "/category";
+        const courseEndpoint = apiEndpoint + "/course";
+
+        const getAPIPassword = async () => {
+            // Setup endpoint URL;
+            const fetchUrl = new URL(window.location.href);
+            fetchUrl.pathname = "/admin/api-password";
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("API password request successfull");
+                
+                // Get text from request;
+                const fetchText = await fetchResult.text();
+
+                return fetchText;
+            } else {
+                console.log("API password request failed");
+                return;
+            }
+        }
+
+        const loadCategories = async () => {
+            $("#tableBody").html("");
+            
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category load request successfull");
+                
+                // Get JSON from request;
+                const fetchJSON = await fetchResult.json();
+
+                let rowId = 0;
+                fetchJSON.forEach(category => {
+                    const html = `<tr id="row${rowId}" onclick="handleRowClick(${rowId})">
+                                    <td>${category.id}</td>
+                                    <td>${category.name}</td>
+                                </tr>`;
+
+                    $("#tableBody").append(html);
+                    rowId++;
+                });
+            } else {
+                console.log("Category load request failed");
+                return;
+            }
+        }
+
+        const handleRowClick = (rowId) => {
+            const tr = $("#row" + rowId);
+            const id = parseInt(tr.children()[0].innerText);
+            const name = tr.children()[1].innerText;
+
+            $("#formUpdate input[name=id]").val(id);
+            $("#formUpdate input[name=name]").val(name);
+
+            $("#formDelete input[name=id]").val(id);
+        }
+
+        $("#btnInsert").on("click", async function (event) {
+            const formInsert = document.getElementById("formInsert");
+            const data = new FormData(formInsert);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "POST",
+                body: dataJSON,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category insert request successfull");
+                loadCategories();
+            } else {
+                console.log("Category insert request failed");
+                return;
+            }
+        });
+
+        $("#btnUpdate").on("click", async function (event) {
+            const formUpdate = document.getElementById("formUpdate");
+            const data = new FormData(formUpdate);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "PUT",
+                body: dataJSON,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category update request successfull");
+                loadCategories();
+            } else {
+                console.log("Category update request failed");
+                return;
+            }
+        });
+
+        $("#btnDelete").on("click", async function (event) {
+            const formDelete = document.getElementById("formDelete");
+            const data = new FormData(formDelete);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+            
+            // Set ID;
+            fetchUrl.searchParams.set("id", dataObj.id);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category delete request successfull");
+                loadCategories();
+            } else {
+                console.log("Category delete request failed");
+                return;
+            }
+        });
+
+        loadCategories();
+    </script>
+</body>
+</html>

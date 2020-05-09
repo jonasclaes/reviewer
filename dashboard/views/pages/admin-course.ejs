@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ReViewer by Jonas Claes | ADMIN</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                ReViewer <strong>ADMIN</strong>
+            </a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="/admin/category">Category</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/admin/course">Course</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" href="/logout">Logout</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col">
+                <h1>Course</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Insert</h4>
+                        <form id="formInsert">
+                            <div class="form-group">
+                                <label for="timestamp">Timestamp:</label>
+                                <input class="form-control" type="text" placeholder="2020-01-01T00:00:00.000Z" name="timestamp">
+                                <small class="form-text text-muted">Fill out the course timestamp here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input class="form-control" type="text" placeholder="Programming" name="name">
+                                <small class="form-text text-muted">Fill out the course name here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea class="form-control" name="description" placeholder="This is a multi-line description box" rows="6"></textarea>
+                                <small class="form-text text-muted">Fill out the course description here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category:</label>
+                                <select class="form-control" name="category"></select>
+                                <small class="form-text text-muted">Fill out the course category here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoUrl">Video URL:</label>
+                                <input class="form-control" type="text" placeholder="https://youtu.be/VIDEO_ID" name="videoUrl">
+                                <small class="form-text text-muted">Fill out the course video url here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-primary btn-block" type="button" id="btnInsert">Insert</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Update</h4>
+                        <form id="formUpdate">
+                            <div class="form-group">
+                                <label for="id">ID:</label>
+                                <input class="form-control" type="number" name="id" placeholder="0">
+                                <small class="form-text text-muted">Fill out the course id here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="timestamp">Timestamp:</label>
+                                <input class="form-control" type="text" placeholder="2020-01-01T00:00:00.000Z" name="timestamp">
+                                <small class="form-text text-muted">Fill out the course timestamp here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input class="form-control" type="text" placeholder="Programming" name="name">
+                                <small class="form-text text-muted">Fill out the course name here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea class="form-control" name="description" placeholder="This is a multi-line description box" rows="6"></textarea>
+                                <small class="form-text text-muted">Fill out the course description here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category:</label>
+                                <select class="form-control" name="category"></select>
+                                <small class="form-text text-muted">Fill out the course category here.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoUrl">Video URL:</label>
+                                <input class="form-control" type="text" placeholder="https://youtu.be/VIDEO_ID" name="videoUrl">
+                                <small class="form-text text-muted">Fill out the course video url here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-secondary btn-block" type="button" id="btnUpdate">Update</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Delete</h4>
+                        <form id="formDelete">
+                            <div class="form-group">
+                                <label for="id">ID:</label>
+                                <input class="form-control" type="number" name="id" placeholder="0">
+                                <small class="form-text text-muted">Fill out the course id here.</small>
+                            </div>
+                        </form>
+                        <button class="btn btn-danger btn-block" type="button" id="btnDelete">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="margin-bottom: 20px;">
+                <div class="custom-control custom-switch">
+                    <input class="custom-control-input" type="checkbox" id="formCheck-1" name="populate" checked>
+                    <label class="custom-control-label" for="formCheck-1">Populate category field</label>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>timestamp</th>
+                                <th>name</th>
+                                <th>description</th>
+                                <th>category</th>
+                                <th>videoUrl</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const apiEndpoint = "https://api.reviewer.jonasclaes.be/api";
+        const categoryEndpoint = apiEndpoint + "/category";
+        const courseEndpoint = apiEndpoint + "/course";
+
+        const categories = {};
+
+        const getAPIPassword = async () => {
+            // Setup endpoint URL;
+            const fetchUrl = new URL(window.location.href);
+            fetchUrl.pathname = "/admin/api-password";
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("API password request successfull");
+                
+                // Get text from request;
+                const fetchText = await fetchResult.text();
+
+                return fetchText;
+            } else {
+                console.log("API password request failed");
+                return;
+            }
+        }
+
+        const loadCategories = async () => {
+            // Setup endpoint URL;
+            const fetchUrl = new URL(categoryEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl)
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Category load request successfull");
+                
+                // Get JSON from request;
+                const fetchJSON = await fetchResult.json();
+
+                fetchJSON.forEach(category => {
+                    const html = `<option value="${category.id}">
+                                    ${category.name}
+                                </option>`;
+
+                    $("#formInsert select[name=category]").append(html);
+                    $("#formUpdate select[name=category]").append(html);
+
+                    categories[category.name] = category.id;
+                });
+            } else {
+                console.log("Category load request failed");
+                return;
+            }
+        }
+
+        const loadCourses = async (populate) => {
+            $("#tableBody").html("");
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(courseEndpoint);
+
+            fetchUrl.searchParams.set("populate", populate);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl);
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Course load request successfull");
+                
+                // Get JSON from request;
+                const fetchJSON = await fetchResult.json();
+
+                let rowId = 0;
+                fetchJSON.forEach(course => {
+                    const html = `<tr id="row${rowId}" onclick="handleRowClick(${rowId})">
+                                    <td>${course.id}</td>
+                                    <td>${course.timestamp}</td>
+                                    <td>${course.name}</td>
+                                    <td>${course.description}</td>
+                                    <td>${course.category}</td>
+                                    <td>${course.videoUrl}</td>
+                                </tr>`;
+
+                    $("#tableBody").append(html);
+                    rowId++;
+                });
+            } else {
+                console.log("Course load request failed");
+                return;
+            }
+        }
+
+        const handleRowClick = (rowId) => {
+            const tr = $("#row" + rowId);
+            const id = parseInt(tr.children()[0].innerText);
+            const timestamp = tr.children()[1].innerText;
+            const name = tr.children()[2].innerText;
+            const description = tr.children()[3].innerText;
+            const category = tr.children()[4].innerText;
+            const videoUrl = tr.children()[5].innerText;
+
+            $("#formUpdate input[name=id]").val(id);
+            $("#formUpdate input[name=timestamp]").val(timestamp);
+            $("#formUpdate input[name=name]").val(name);
+            $("#formUpdate textarea[name=description]").val(description);
+            if (isNaN(category)) {
+                // Category is of type text;
+                $("#formUpdate select[name=category]").val(categories[category]);
+            } else {
+                // Category is of type number;
+                $("#formUpdate select[name=category]").val(category);
+            }
+            $("#formUpdate input[name=videoUrl]").val(videoUrl);
+
+            $("#formDelete input[name=id]").val(id);
+        }
+
+        $("#btnInsert").on("click", async function (event) {
+            const formInsert = document.getElementById("formInsert");
+            const data = new FormData(formInsert);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(courseEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "POST",
+                body: dataJSON,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Course insert request successfull");
+                loadCourses($("#formCheck-1").is(":checked"));
+            } else {
+                console.log("Course insert request failed");
+                return;
+            }
+        });
+
+        $("#btnUpdate").on("click", async function (event) {
+            const formUpdate = document.getElementById("formUpdate");
+            const data = new FormData(formUpdate);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(courseEndpoint);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "PUT",
+                body: dataJSON,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Course update request successfull");
+                loadCourses($("#formCheck-1").is(":checked"));
+            } else {
+                console.log("Course update request failed");
+                return;
+            }
+        });
+
+        $("#btnDelete").on("click", async function (event) {
+            const formDelete = document.getElementById("formDelete");
+            const data = new FormData(formDelete);
+            const dataObj = Object.fromEntries(data);
+            const dataJSON = JSON.stringify(dataObj);
+
+            // Get API password;
+            const apiPassword = await getAPIPassword();
+
+            // Setup endpoint URL;
+            const fetchUrl = new URL(courseEndpoint);
+            
+            // Set ID;
+            fetchUrl.searchParams.set("id", dataObj.id);
+
+            // Do the actual request;
+            const fetchResult = await fetch(fetchUrl, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": apiPassword
+                }
+            });
+
+            // Check if the request was successfull;
+            if (fetchResult.status === 200) {
+                console.log("Course delete request successfull");
+                loadCourses($("#formCheck-1").is(":checked"));
+            } else {
+                console.log("Course delete request failed");
+                return;
+            }
+        });
+
+        $("#formCheck-1").change(function (event) {
+            loadCourses(this.checked);
+        });
+
+        loadCategories();
+        loadCourses($("#formCheck-1").is(":checked"));
+    </script>
+</body>
+</html>
