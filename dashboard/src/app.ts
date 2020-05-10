@@ -16,7 +16,7 @@ import { database } from "./common/database";
 import { Category } from "./common/category";
 import { Course } from "./common/course";
 import { User } from "./common/user";
-import { authorizeSession } from "./common/authorization";
+import { authorizeSession, authorizeSessionAdmin } from "./common/authorization";
 
 // Setup Express;
 const app = express();
@@ -58,29 +58,19 @@ app.get("/course", authorizeSession, (req, res) => {
     res.render("pages/course");
 });
 
-const checkAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findByUsername(req.session!.username);
-
-    if (user.role == "Admin") {
-        next();
-    } else {
-        res.redirect("/");
-    }
-}
-
-app.get("/admin/api-password", authorizeSession, checkAdmin, (req, res) => {
+app.get("/admin/api-password", authorizeSessionAdmin, (req, res) => {
     res.send(process.env.API_PASSWORD);
 });
 
-app.get("/admin", authorizeSession, checkAdmin, (req, res) => {
+app.get("/admin", authorizeSessionAdmin, (req, res) => {
     res.redirect("/admin/category");
 });
 
-app.get("/admin/category", authorizeSession, checkAdmin, (req, res) => {
+app.get("/admin/category", authorizeSessionAdmin, (req, res) => {
     res.render("pages/admin-category");
 });
 
-app.get("/admin/course", authorizeSession, checkAdmin, (req, res) => {
+app.get("/admin/course", authorizeSessionAdmin, (req, res) => {
     res.render("pages/admin-course");
 });
 
@@ -91,6 +81,7 @@ app.get("/login", (req, res) => {
 app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    const redirectUrl = req.body.redirectUrl;
 
     if (username && password) {
         const user = await User.findByUsernameOrEmail(username);
@@ -98,7 +89,12 @@ app.post("/login", async (req, res) => {
         if (user.username && user.password && await user.checkPassword(password)) {
             req.session!.loggedIn = true;
             req.session!.username = user.username;
-            res.redirect("/");
+
+            if (redirectUrl) {
+                res.redirect(redirectUrl);
+            } else {
+                res.redirect("/");
+            }
         } else {
             res.send("Incorrect username and/or password.");
         }
