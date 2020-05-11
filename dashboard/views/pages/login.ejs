@@ -34,6 +34,8 @@
                         <h5 class="mb-0">Login</h5>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-danger" role="alert" id="alertBox" style="display: none;"></div>
+                        <div class="alert alert-success" role="alert" id="alertBoxSuccess" style="display: none;"></div>
                         <form>
                             <div class="form-group">
                                 <label for="account">Username/email:</label>
@@ -88,12 +90,20 @@
                     }
                 });
 
-                console.log(await res.text());
-
                 if (res.redirected) {
-                    window.location.href = res.url;
+                    $("#alertBoxSuccess").html("Correct login details, logging in...");
+                    $("#alertBox").hide();
+                    $("#alertBoxSuccess").fadeIn(100);
+
+                    setTimeout(function () {
+                        window.location.href = res.url;
+                    }, 1500);
+                } else {
+                    const resText = await res.text();
+
+                    $("#alertBox").html(resText);
+                    $("#alertBox").fadeIn(100);
                 }
-            
             } catch (err) {
                 console.error(err);
             }
